@@ -1,0 +1,803 @@
+﻿```aspx
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="MedicineAvailabilityFinder.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head runat="server">
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%: Page.Title %> | MediFind</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <style>
+
+        /* =========================================================
+           MEDIFIND DESIGN SYSTEM
+           ========================================================= */
+
+        :root {
+
+            --red: #a32932;
+            --red-dark: #7e1f27;
+            --red-light: #f8e9ea;
+
+            --brown: #765548;
+            --brown-dark: #49352c;
+            --brown-light: #a98876;
+
+            --cream: #f7f2ed;
+            --cream-dark: #eee5de;
+
+            --white: #ffffff;
+
+            --text: #292421;
+            --muted: #756b66;
+
+            --border: #e5dcd5;
+
+            --shadow-sm: 0 4px 14px rgba(73,53,44,.06);
+            --shadow: 0 10px 30px rgba(73,53,44,.08);
+        }
+
+
+        /* =========================================================
+           BASE
+           ========================================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            margin: 0;
+
+            background: var(--cream);
+
+            color: var(--text);
+
+            font-family: 'DM Sans', sans-serif;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           NAVBAR
+           ========================================================= */
+
+        .mf-navbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 9999;
+
+            height: 76px;
+
+            background: rgba(255,255,255,.96);
+
+            border-bottom: 1px solid var(--border);
+
+            backdrop-filter: blur(12px);
+
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+
+        .mf-navbar-inner {
+
+            height: 76px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        /* BRAND */
+
+        .mf-brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none !important;
+
+            color: var(--text) !important;
+        }
+
+
+        .mf-logo {
+
+            width: 42px;
+
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: var(--red);
+
+            color: white;
+
+            border-radius: 11px;
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            box-shadow: 0 7px 18px rgba(163,41,50,.20);
+        }
+
+
+        .mf-brand-name {
+
+            font-family: 'Manrope', sans-serif;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            letter-spacing: -.6px;
+
+            line-height: 1;
+        }
+
+
+        .mf-brand-tagline {
+
+            display: block;
+
+            margin-top: 5px;
+
+            color: var(--muted);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.2px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* NAV LINKS */
+
+        .mf-navigation {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 4px;
+        }
+
+
+        .mf-nav-link {
+
+            display: flex;
+
+            align-items: center;
+
+            min-height: 42px;
+
+            padding: 0 14px;
+
+            border-radius: 9px;
+
+            color: var(--muted) !important;
+
+            text-decoration: none !important;
+
+            font-weight: 600;
+
+            font-size: 14px;
+
+            transition: .2s ease;
+        }
+
+
+        .mf-nav-link:hover {
+
+            background: var(--red-light);
+
+            color: var(--red) !important;
+        }
+
+
+        .mf-nav-admin {
+
+            margin-left: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            min-height: 42px;
+
+            padding: 0 18px;
+
+            background: var(--red);
+
+            border-radius: 9px;
+
+            color: white !important;
+
+            text-decoration: none !important;
+
+            font-weight: 700;
+
+            font-size: 13px;
+
+            box-shadow: 0 6px 16px rgba(163,41,50,.18);
+
+            transition: .2s ease;
+        }
+
+
+        .mf-nav-admin:hover {
+
+            background: var(--red-dark);
+
+            color: white !important;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================================================
+           PAGE
+           ========================================================= */
+
+        .mf-page {
+
+            min-height: calc(100vh - 76px);
+        }
+
+
+        .mf-content {
+
+            padding-top: 36px;
+
+            padding-bottom: 60px;
+        }
+
+
+        /* =========================================================
+           COMMON COMPONENTS
+           ========================================================= */
+
+        .mf-card {
+
+            background: var(--white);
+
+            border: 1px solid var(--border);
+
+            border-radius: 14px;
+
+            box-shadow: var(--shadow-sm);
+        }
+
+
+        .mf-card-header {
+
+            padding: 20px 22px;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+
+        .mf-card-body {
+
+            padding: 22px;
+        }
+
+
+        .mf-title {
+
+            margin: 0;
+
+            color: var(--brown-dark);
+
+            font-family: 'Manrope', sans-serif;
+
+            font-weight: 800;
+
+            letter-spacing: -.5px;
+        }
+
+
+        .mf-subtitle {
+
+            margin-top: 5px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+
+        /* BUTTON */
+
+        .mf-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 42px;
+
+            padding: 0 18px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: var(--red);
+
+            color: white !important;
+
+            font-weight: 700;
+
+            text-decoration: none !important;
+
+            cursor: pointer;
+
+            transition: .2s ease;
+        }
+
+
+        .mf-btn:hover {
+
+            background: var(--red-dark);
+
+            color: white !important;
+
+            transform: translateY(-1px);
+        }
+
+
+        .mf-btn-secondary {
+
+            background: var(--cream-dark);
+
+            color: var(--brown-dark) !important;
+        }
+
+
+        .mf-btn-secondary:hover {
+
+            background: var(--brown);
+
+            color: white !important;
+        }
+
+
+        /* INPUT */
+
+        .mf-input {
+
+            width: 100%;
+
+            min-height: 44px;
+
+            padding: 8px 13px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: var(--text);
+
+            outline: none;
+
+            transition: .2s ease;
+        }
+
+
+        .mf-input:focus {
+
+            border-color: var(--red);
+
+            box-shadow: 0 0 0 3px rgba(163,41,50,.10);
+        }
+
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+
+        .mf-footer {
+
+            background: var(--brown-dark);
+
+            color: white;
+
+            margin-top: auto;
+        }
+
+
+        .mf-footer-main {
+
+            padding: 42px 0 30px;
+        }
+
+
+        .mf-footer-logo {
+
+            font-family: 'Manrope', sans-serif;
+
+            font-size: 20px;
+
+            font-weight: 800;
+        }
+
+
+        .mf-footer-text {
+
+            max-width: 500px;
+
+            margin-top: 8px;
+
+            color: rgba(255,255,255,.62);
+
+            font-size: 13px;
+        }
+
+
+        .mf-footer-bottom {
+
+            padding: 16px 0;
+
+            border-top: 1px solid rgba(255,255,255,.10);
+
+            color: rgba(255,255,255,.50);
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           MOBILE
+           ========================================================= */
+
+        .mf-mobile-button {
+
+            display: none;
+
+            width: 42px;
+
+            height: 42px;
+
+            border: 1px solid var(--border);
+
+            background: white;
+
+            border-radius: 9px;
+
+            font-size: 20px;
+
+            color: var(--brown-dark);
+        }
+
+
+        @media(max-width: 768px) {
+
+            .mf-navbar,
+            .mf-navbar-inner {
+
+                height: 68px;
+            }
+
+
+            .mf-mobile-button {
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+            }
+
+
+            .mf-navigation {
+
+                display: none;
+
+                position: absolute;
+
+                top: 76px;
+
+                left: 15px;
+
+                right: 15px;
+
+                padding: 10px;
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                background: white;
+
+                border: 1px solid var(--border);
+
+                border-radius: 12px;
+
+                box-shadow: var(--shadow);
+            }
+
+
+            .mf-navigation.open {
+
+                display: flex;
+            }
+
+
+            .mf-nav-link {
+
+                width: 100%;
+            }
+
+
+            .mf-nav-admin {
+
+                margin: 5px 0 0;
+
+                justify-content: center;
+            }
+
+
+            .mf-brand-tagline {
+
+                display: none;
+            }
+
+
+            .mf-content {
+
+                padding-top: 24px;
+
+                padding-bottom: 40px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<form runat="server">
+
+
+    <!-- =========================================================
+         NAVIGATION
+         ========================================================= -->
+
+    <header class="mf-navbar">
+
+        <div class="container mf-navbar-inner">
+
+
+            <!-- BRAND -->
+
+            <a runat="server"
+               href="~/"
+               class="mf-brand">
+
+                <span class="mf-logo">+</span>
+
+                <span>
+
+                    <span class="mf-brand-name">
+                        MediFind
+                    </span>
+
+                    <span class="mf-brand-tagline">
+                        Medicine Availability Finder
+                    </span>
+
+                </span>
+
+            </a>
+
+
+            <!-- MOBILE BUTTON -->
+
+            <button type="button"
+                    class="mf-mobile-button"
+                    onclick="toggleMediFindNavigation()">
+
+                ☰
+
+            </button>
+
+
+            <!-- NAVIGATION -->
+
+            <nav id="mfNavigation"
+                 class="mf-navigation">
+
+
+                <a runat="server"
+                   href="~/"
+                   class="mf-nav-link">
+
+                    Home
+
+                </a>
+
+
+                <a runat="server"
+                   href="~/About"
+                   class="mf-nav-link">
+
+                    About
+
+                </a>
+
+
+                <a runat="server"
+                   href="~/Contact"
+                   class="mf-nav-link">
+
+                    Contact
+
+                </a>
+
+
+                <a runat="server"
+                   href="~/Admin/ManagePharmacy.aspx"
+                   class="mf-nav-admin">
+
+                    Manage Pharmacy
+
+                </a>
+
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
+
+    <main class="mf-page">
+
+        <div class="container mf-content">
+
+            <asp:ContentPlaceHolder
+                ID="MainContent"
+                runat="server">
+
+            </asp:ContentPlaceHolder>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="mf-footer">
+
+
+        <div class="container mf-footer-main">
+
+            <div class="mf-footer-logo">
+
+                MediFind
+
+            </div>
+
+
+            <div class="mf-footer-text">
+
+                Find medicines. Find pharmacies.
+                Get the information you need, when you need it.
+
+            </div>
+
+        </div>
+
+
+        <div class="mf-footer-bottom">
+
+            <div class="container">
+
+                © <%: DateTime.Now.Year %>
+                MediFind — Medicine Availability Finder
+
+            </div>
+
+        </div>
+
+
+    </footer>
+
+
+
+</form>
+
+
+<!-- BOOTSTRAP -->
+
+<asp:PlaceHolder runat="server">
+
+    <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+
+</asp:PlaceHolder>
+
+
+<script>
+
+    function toggleMediFindNavigation() {
+
+        var navigation =
+            document.getElementById("mfNavigation");
+
+        if (navigation) {
+
+            navigation.classList.toggle("open");
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
+```

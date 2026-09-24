@@ -1,0 +1,1335 @@
+﻿```aspx
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="MedicineAvailabilityFinder.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head runat="server">
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%: Page.Title %> | MediFind</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <!-- =====================================================
+         MODERN FONTS
+         ===================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+          rel="stylesheet" />
+
+
+    <!-- =====================================================
+         MEDIFIND DESIGN
+         ===================================================== -->
+
+    <style>
+
+        /* =====================================================
+           COLOR SYSTEM
+           ===================================================== */
+
+        :root {
+
+            --mf-red: #A32932;
+            --mf-red-dark: #7E1F27;
+            --mf-red-light: #F8E9EA;
+
+            --mf-brown: #765548;
+            --mf-brown-dark: #49352C;
+            --mf-brown-light: #A98876;
+
+            --mf-cream: #F7F2ED;
+            --mf-cream-dark: #EEE5DE;
+
+            --mf-bg: #FCFAF8;
+
+            --mf-white: #FFFFFF;
+
+            --mf-text: #292421;
+            --mf-muted: #756B66;
+
+            --mf-border: #E5DCD5;
+
+            --mf-shadow-sm:
+                0 4px 14px rgba(73, 53, 44, 0.06);
+
+            --mf-shadow:
+                0 12px 35px rgba(73, 53, 44, 0.09);
+
+            --mf-shadow-hover:
+                0 16px 40px rgba(73, 53, 44, 0.13);
+        }
+
+
+        /* =====================================================
+           GLOBAL
+           ===================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            background: var(--mf-bg);
+
+            color: var(--mf-text);
+
+            font-family: 'DM Sans', sans-serif;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            -webkit-font-smoothing: antialiased;
+        }
+
+
+        a {
+            transition: all 0.2s ease;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+           ===================================================== */
+
+        .mf-navbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 9999;
+
+            width: 100%;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            border-bottom: 1px solid rgba(229, 220, 213, 0.9);
+
+            backdrop-filter: blur(16px);
+
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+
+        .mf-nav-inner {
+
+            min-height: 76px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 25px;
+        }
+
+
+        /* =====================================================
+           BRAND
+           ===================================================== */
+
+        .mf-brand {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-decoration: none !important;
+
+            color: var(--mf-text) !important;
+
+            white-space: nowrap;
+        }
+
+
+        .mf-brand-icon {
+
+            width: 43px;
+
+            height: 43px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+
+            background: var(--mf-red);
+
+            color: #FFFFFF;
+
+            border-radius: 11px;
+
+            font-family: 'Manrope', sans-serif;
+
+            font-size: 25px;
+
+            font-weight: 800;
+
+            line-height: 1;
+
+            box-shadow:
+                0 7px 18px rgba(163, 41, 50, 0.20);
+        }
+
+
+        .mf-brand-text {
+
+            display: flex;
+
+            flex-direction: column;
+
+            line-height: 1.05;
+        }
+
+
+        .mf-brand-name {
+
+            font-family: 'Manrope', sans-serif;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.7px;
+        }
+
+
+        .mf-brand-subtitle {
+
+            margin-top: 5px;
+
+            color: var(--mf-muted);
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.15px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* =====================================================
+           DESKTOP NAVIGATION
+           ===================================================== */
+
+        .mf-nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 4px;
+
+            margin-left: auto;
+        }
+
+
+        .mf-nav-link {
+
+            position: relative;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 42px;
+
+            padding: 0 14px;
+
+            border-radius: 9px;
+
+            color: var(--mf-muted) !important;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            text-decoration: none !important;
+        }
+
+
+        .mf-nav-link:hover {
+
+            color: var(--mf-red) !important;
+
+            background: var(--mf-red-light);
+        }
+
+
+        .mf-nav-link:focus {
+
+            color: var(--mf-red) !important;
+
+            outline: none;
+
+            background: var(--mf-red-light);
+        }
+
+
+        /* =====================================================
+           ADMIN / PRIMARY BUTTON
+           ===================================================== */
+
+        .mf-nav-cta {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 42px;
+
+            margin-left: 8px;
+
+            padding: 0 18px;
+
+            border-radius: 9px;
+
+            background: var(--mf-red);
+
+            color: #FFFFFF !important;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            text-decoration: none !important;
+
+            box-shadow:
+                0 6px 16px rgba(163, 41, 50, 0.18);
+        }
+
+
+        .mf-nav-cta:hover {
+
+            background: var(--mf-red-dark);
+
+            color: #FFFFFF !important;
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 9px 22px rgba(163, 41, 50, 0.24);
+        }
+
+
+        /* =====================================================
+           MOBILE MENU BUTTON
+           ===================================================== */
+
+        .mf-menu-btn {
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 43px;
+
+            height: 43px;
+
+            padding: 0;
+
+            border: 1px solid var(--mf-border);
+
+            border-radius: 10px;
+
+            background: #FFFFFF;
+
+            color: var(--mf-brown-dark);
+
+            font-size: 20px;
+
+            line-height: 1;
+
+            cursor: pointer;
+
+            box-shadow: var(--mf-shadow-sm);
+        }
+
+
+        .mf-menu-btn:hover {
+
+            border-color: var(--mf-red);
+
+            color: var(--mf-red);
+
+            background: var(--mf-red-light);
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+           ===================================================== */
+
+        .mf-main {
+
+            min-height: calc(100vh - 76px);
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .mf-content {
+
+            width: 100%;
+
+            padding-top: 36px;
+
+            padding-bottom: 60px;
+        }
+
+
+        /* =====================================================
+           COMMON CARD
+           ===================================================== */
+
+        .mf-card {
+
+            background: var(--mf-white);
+
+            border: 1px solid var(--mf-border);
+
+            border-radius: 14px;
+
+            box-shadow: var(--mf-shadow-sm);
+
+            transition: all 0.2s ease;
+        }
+
+
+        .mf-card:hover {
+
+            box-shadow: var(--mf-shadow);
+        }
+
+
+        .mf-card-header {
+
+            padding: 20px 22px;
+
+            border-bottom: 1px solid var(--mf-border);
+        }
+
+
+        .mf-card-body {
+
+            padding: 22px;
+        }
+
+
+        /* =====================================================
+           TITLES
+           ===================================================== */
+
+        .mf-section-title {
+
+            margin: 0;
+
+            color: var(--mf-brown-dark);
+
+            font-family: 'Manrope', sans-serif;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .mf-section-subtitle {
+
+            margin: 5px 0 0;
+
+            color: var(--mf-muted);
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           BUTTONS
+           ===================================================== */
+
+        .mf-btn-primary {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 42px;
+
+            padding: 0 18px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: var(--mf-red);
+
+            color: #FFFFFF !important;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            text-decoration: none !important;
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+        }
+
+
+        .mf-btn-primary:hover {
+
+            background: var(--mf-red-dark);
+
+            color: #FFFFFF !important;
+
+            transform: translateY(-1px);
+        }
+
+
+        .mf-btn-secondary {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 42px;
+
+            padding: 0 18px;
+
+            border: 1px solid var(--mf-border);
+
+            border-radius: 9px;
+
+            background: var(--mf-cream);
+
+            color: var(--mf-brown-dark) !important;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            text-decoration: none !important;
+
+            cursor: pointer;
+
+            transition: all 0.2s ease;
+        }
+
+
+        .mf-btn-secondary:hover {
+
+            background: var(--mf-brown);
+
+            border-color: var(--mf-brown);
+
+            color: #FFFFFF !important;
+        }
+
+
+        /* =====================================================
+           FORM INPUT
+           ===================================================== */
+
+        .mf-input {
+
+            width: 100%;
+
+            min-height: 44px;
+
+            padding: 9px 13px;
+
+            border: 1px solid var(--mf-border);
+
+            border-radius: 9px;
+
+            background: #FFFFFF;
+
+            color: var(--mf-text);
+
+            font-family: 'DM Sans', sans-serif;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: all 0.2s ease;
+        }
+
+
+        .mf-input::placeholder {
+
+            color: #A59B95;
+        }
+
+
+        .mf-input:focus {
+
+            border-color: var(--mf-red);
+
+            box-shadow:
+                0 0 0 3px rgba(163, 41, 50, 0.10);
+        }
+
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        .mf-footer {
+
+            margin-top: auto;
+
+            background: var(--mf-brown-dark);
+
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+
+        .mf-footer-main {
+
+            padding: 42px 0 30px;
+        }
+
+
+        .mf-footer-brand {
+
+            color: #FFFFFF;
+
+            font-family: 'Manrope', sans-serif;
+
+            font-size: 20px;
+
+            font-weight: 800;
+        }
+
+
+        .mf-footer-description {
+
+            max-width: 500px;
+
+            margin-top: 8px;
+
+            color: rgba(255, 255, 255, 0.60);
+
+            font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+
+        .mf-footer-bottom {
+
+            padding: 16px 0;
+
+            border-top: 1px solid rgba(255, 255, 255, 0.10);
+
+            color: rgba(255, 255, 255, 0.48);
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           MOBILE / TABLET
+           ===================================================== */
+
+        @media (max-width: 768px) {
+
+            /* Navbar */
+
+            .mf-navbar {
+
+                height: 68px;
+            }
+
+
+            .mf-nav-inner {
+
+                min-height: 68px;
+
+                height: 68px;
+            }
+
+
+            /* Hide subtitle */
+
+            .mf-brand-subtitle {
+
+                display: none;
+            }
+
+
+            .mf-brand-name {
+
+                font-size: 19px;
+            }
+
+
+            .mf-brand-icon {
+
+                width: 40px;
+
+                height: 40px;
+
+                font-size: 23px;
+
+                border-radius: 10px;
+            }
+
+
+            /* Show hamburger */
+
+            .mf-menu-btn {
+
+                display: flex;
+            }
+
+
+            /* Mobile Navigation */
+
+            .mf-nav-links {
+
+                display: none;
+
+                position: absolute;
+
+                left: 12px;
+
+                right: 12px;
+
+                top: 68px;
+
+                margin: 0;
+
+                padding: 10px;
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 3px;
+
+                background: rgba(255, 255, 255, 0.98);
+
+                border: 1px solid var(--mf-border);
+
+                border-radius: 14px;
+
+                box-shadow: var(--mf-shadow);
+
+                backdrop-filter: blur(15px);
+
+                -webkit-backdrop-filter: blur(15px);
+
+                animation: mfMenuOpen 0.18s ease-out;
+            }
+
+
+            /* Open state */
+
+            .mf-nav-links.show {
+
+                display: flex;
+            }
+
+
+            /* Mobile links */
+
+            .mf-nav-link {
+
+                width: 100%;
+
+                min-height: 48px;
+
+                justify-content: flex-start;
+
+                padding: 0 15px;
+
+                border-radius: 9px;
+
+                font-size: 14px;
+            }
+
+
+            .mf-nav-link:hover {
+
+                background: var(--mf-red-light);
+            }
+
+
+            /* Mobile CTA */
+
+            .mf-nav-cta {
+
+                width: 100%;
+
+                min-height: 46px;
+
+                margin: 5px 0 2px;
+
+                border-radius: 9px;
+            }
+
+
+            /* Main content */
+
+            .mf-main {
+
+                min-height: calc(100vh - 68px);
+            }
+
+
+            .mf-content {
+
+                padding-top: 24px;
+
+                padding-bottom: 40px;
+            }
+
+
+            /* Cards */
+
+            .mf-card {
+
+                border-radius: 12px;
+            }
+
+
+            .mf-card-header {
+
+                padding: 17px;
+            }
+
+
+            .mf-card-body {
+
+                padding: 17px;
+            }
+
+
+            /* Footer */
+
+            .mf-footer-main {
+
+                padding: 32px 0 24px;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL PHONES
+           ===================================================== */
+
+        @media (max-width: 420px) {
+
+            .mf-brand-name {
+
+                font-size: 18px;
+            }
+
+
+            .mf-brand-icon {
+
+                width: 38px;
+
+                height: 38px;
+
+                font-size: 21px;
+            }
+
+
+            .mf-menu-btn {
+
+                width: 40px;
+
+                height: 40px;
+            }
+
+
+            .mf-content {
+
+                padding-top: 20px;
+
+                padding-bottom: 32px;
+            }
+
+
+            .mf-section-title {
+
+                font-size: 20px;
+            }
+        }
+
+
+        /* =====================================================
+           MENU ANIMATION
+           ===================================================== */
+
+        @keyframes mfMenuOpen {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(-7px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<form runat="server">
+
+
+    <!-- =====================================================
+         ASP.NET SCRIPT MANAGER
+         ===================================================== -->
+
+    <asp:ScriptManager runat="server">
+
+        <Scripts>
+
+            <asp:ScriptReference Name="MsAjaxBundle" />
+
+            <asp:ScriptReference Name="jquery" />
+
+            <asp:ScriptReference
+                Name="WebForms.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/WebForms.js" />
+
+            <asp:ScriptReference
+                Name="WebUIValidation.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/WebUIValidation.js" />
+
+            <asp:ScriptReference
+                Name="MenuStandards.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/MenuStandards.js" />
+
+            <asp:ScriptReference
+                Name="GridView.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/GridView.js" />
+
+            <asp:ScriptReference
+                Name="DetailsView.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/DetailsView.js" />
+
+            <asp:ScriptReference
+                Name="TreeView.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/TreeView.js" />
+
+            <asp:ScriptReference
+                Name="WebParts.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/WebParts.js" />
+
+            <asp:ScriptReference
+                Name="Focus.js"
+                Assembly="System.Web"
+                Path="~/Scripts/WebForms/Focus.js" />
+
+            <asp:ScriptReference Name="WebFormsBundle" />
+
+        </Scripts>
+
+    </asp:ScriptManager>
+
+
+
+    <!-- =====================================================
+         NAVIGATION BAR
+         ===================================================== -->
+
+    <header class="mf-navbar">
+
+        <div class="container mf-nav-inner">
+
+
+            <!-- BRAND -->
+
+            <a runat="server"
+               href="~/"
+               class="mf-brand">
+
+
+                <span class="mf-brand-icon">
+                    +
+                </span>
+
+
+                <span class="mf-brand-text">
+
+                    <span class="mf-brand-name">
+                        MediFind
+                    </span>
+
+                    <span class="mf-brand-subtitle">
+                        Medicine Availability Finder
+                    </span>
+
+                </span>
+
+
+            </a>
+
+
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button type="button"
+                    class="mf-menu-btn"
+                    onclick="toggleMediFindMenu()"
+                    aria-label="Open navigation menu"
+                    aria-expanded="false">
+
+                ☰
+
+            </button>
+
+
+
+            <!-- NAVIGATION LINKS -->
+
+            <nav id="mfNavigation"
+                 class="mf-nav-links">
+
+
+                <!-- HOME -->
+
+                <a runat="server"
+                   href="~/"
+                   class="mf-nav-link">
+
+                    Home
+
+                </a>
+
+
+                <!-- FIND MEDICINE -->
+
+                <a runat="server"
+                   href="~/FindMedicine"
+                   class="mf-nav-link">
+
+                    Find Medicine
+
+                </a>
+
+
+                <!-- PHARMACIES -->
+
+                <a runat="server"
+                   href="~/Pharmacies"
+                   class="mf-nav-link">
+
+                    Pharmacies
+
+                </a>
+
+
+                <!-- ABOUT -->
+
+                <a runat="server"
+                   href="~/About"
+                   class="mf-nav-link">
+
+                    About
+
+                </a>
+
+
+                <!-- CONTACT -->
+
+                <a runat="server"
+                   href="~/Contact"
+                   class="mf-nav-link">
+
+                    Contact
+
+                </a>
+
+
+                <!-- MANAGE PHARMACY -->
+
+                <a runat="server"
+                   href="~/Admin/ManagePharmacy.aspx"
+                   class="mf-nav-cta">
+
+                    Manage Pharmacy
+
+                </a>
+
+
+            </nav>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN PAGE CONTENT
+         ===================================================== -->
+
+    <main class="mf-main">
+
+        <div class="container mf-content">
+
+
+            <asp:ContentPlaceHolder
+                ID="MainContent"
+                runat="server">
+
+            </asp:ContentPlaceHolder>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="mf-footer">
+
+
+        <div class="container mf-footer-main">
+
+
+            <div class="mf-footer-brand">
+
+                MediFind
+
+            </div>
+
+
+            <div class="mf-footer-description">
+
+                Find medicines and nearby pharmacies with ease.
+                A simple platform designed to make medicine
+                availability easier to discover.
+
+            </div>
+
+
+        </div>
+
+
+        <div class="mf-footer-bottom">
+
+            <div class="container">
+
+                © <%: DateTime.Now.Year %>
+                MediFind — Medicine Availability Finder
+
+            </div>
+
+        </div>
+
+
+    </footer>
+
+
+
+</form>
+
+
+
+<!-- =====================================================
+     BOOTSTRAP JAVASCRIPT
+     ===================================================== -->
+
+<asp:PlaceHolder runat="server">
+
+    <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+
+</asp:PlaceHolder>
+
+
+
+<!-- =====================================================
+     MOBILE NAVIGATION SCRIPT
+     ===================================================== -->
+
+<script>
+
+    function toggleMediFindMenu() {
+
+        var menu =
+            document.getElementById("mfNavigation");
+
+        var button =
+            document.querySelector(".mf-menu-btn");
+
+
+        if (menu) {
+
+            menu.classList.toggle("show");
+
+
+            if (button) {
+
+                var isOpen =
+                    menu.classList.contains("show");
+
+                button.setAttribute(
+                    "aria-expanded",
+                    isOpen ? "true" : "false"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /* Close menu when clicking outside */
+
+    document.addEventListener("click", function (event) {
+
+        var menu =
+            document.getElementById("mfNavigation");
+
+        var button =
+            document.querySelector(".mf-menu-btn");
+
+
+        if (!menu || !button) {
+            return;
+        }
+
+
+        if (!menu.contains(event.target) &&
+            !button.contains(event.target)) {
+
+            menu.classList.remove("show");
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+
+    });
+
+
+    /* Close mobile menu after selecting a link */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var links =
+            document.querySelectorAll(".mf-nav-link, .mf-nav-cta");
+
+
+        links.forEach(function (link) {
+
+            link.addEventListener("click", function () {
+
+                var menu =
+                    document.getElementById("mfNavigation");
+
+                var button =
+                    document.querySelector(".mf-menu-btn");
+
+
+                if (menu) {
+
+                    menu.classList.remove("show");
+
+                }
+
+
+                if (button) {
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+
+            });
+
+        });
+
+    });
+
+</script>
+
+
+</body>
+
+</html>
+```
